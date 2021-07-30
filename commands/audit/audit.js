@@ -1,6 +1,6 @@
 const mongo = require('./../../mongo');
 const auditSchema = require('./../../schemas/audit-schema');
-const { cache } = require('./../../audit');
+const { clearCache } = require('./../../audit');
 module.exports = {
     aliases: 'audit',
     maxArgs: 0,
@@ -25,9 +25,8 @@ module.exports = {
             }
         })
 
-        cache[guild.id] = {
-            channelId: channel.id
-        }
+        // empty cache for the current guild
+        clearCache(message)
 
         channel.send(`Set ${channel} as new audit channel`)
     },

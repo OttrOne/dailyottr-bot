@@ -36,5 +36,8 @@ module.exports = {
         const channel = guild.channels.cache.get(data.channelId)
         channel.send(text)
     },
-    cache
+    clearCache: (message) => {
+        delete cache[message.guild.id];
+        console.log(`cleared audit cache for ${message.guild.name}`)
+    }
 }
