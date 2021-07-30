@@ -35,5 +35,6 @@ module.exports = {
         // send audit text to channel
         const channel = guild.channels.cache.get(data.channelId)
         channel.send(text)
-    }
+    },
+    cache
 }
