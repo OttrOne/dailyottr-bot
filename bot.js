@@ -20,7 +20,7 @@ client.on('ready', async () => {
 
     console.log('\n==== Loading commands ====')
 
-    const cmdBaseFile = 'command.js';
+    const cmdBaseFile = 'commands.js';
     const cmdBase = require(`./commands/${cmdBaseFile}`);
 
     // recursively read directory for commands

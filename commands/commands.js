@@ -75,6 +75,10 @@ module.exports = (commandOptions) => {
   }
 }
 
+module.exports.load = (client) => {
+
+}
+
 module.exports.listen = (client) => {
   client.on('message', message => {
     const { member, content, guild } = message;
