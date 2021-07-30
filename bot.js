@@ -4,8 +4,7 @@ const fs = require('fs');
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const poll = require('./poll')
-const welcome = require('./welcome')
-const { auditInit, audit } = require('./audit')
+//const welcome = require('./welcome')
 
 
 client.on('ready', async () => {
