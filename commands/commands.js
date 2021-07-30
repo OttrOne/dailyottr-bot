@@ -1,4 +1,6 @@
-const { prefix } = require('../settings.json')
+const { prefix } = require('../settings.json');
+const path = require('path');
+const fs = require('fs');
 
 const validatePermissions = (permissions) => {
   const validPermissions = [
@@ -50,7 +52,7 @@ const validatePermissions = (permissions) => {
 
 const allCommands = {}
 
-module.exports = (commandOptions) => {
+module.exports.register = (commandOptions) => {
   let {
     aliases,
     permissions = [],
@@ -76,7 +78,29 @@ module.exports = (commandOptions) => {
 }
 
 module.exports.load = (client) => {
+  console.log('\n==== Loading commands ====')
+  const cmdBaseFile = path.basename(__filename);
 
+  // recursively read directory for commands
+  const readCommands = dir => {
+    const files = fs.readdirSync(path.join(__dirname, dir))
+    for(const file of files) {
+        const stat = fs.lstatSync(path.join(__dirname, dir, file))
+        if (stat.isDirectory()) {
+            readCommands(path.join(dir, file))
+        } else if (file !== cmdBaseFile) {
+            const option = require(path.join(__dirname, dir, file))
+            // call the command
+            this.register(option)
+        }
+    }
+  }
+  readCommands('')
+  console.log('==== Commands loaded ====\n')
+}
+
+module.exports.getCommands = () => {
+  return { ... allCommands }; // return copy of commands
 }
 
 module.exports.listen = (client) => {

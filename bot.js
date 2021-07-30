@@ -5,6 +5,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const poll = require('./poll')
 const mongo = require('./mongo')
+const commands = require('./commands/commands')
 //const welcome = require('./welcome')
 
 
@@ -18,30 +19,8 @@ client.on('ready', async () => {
         }
     })
 
-    console.log('\n==== Loading commands ====')
-
-    const cmdBaseFile = 'commands.js';
-    const cmdBase = require(`./commands/${cmdBaseFile}`);
-
-    // recursively read directory for commands
-    const readCommands = dir => {
-        const files = fs.readdirSync(path.join(__dirname, dir))
-        for(const file of files) {
-            const stat = fs.lstatSync(path.join(__dirname, dir, file))
-            if (stat.isDirectory()) {
-                readCommands(path.join(dir, file))
-            } else if (file !== cmdBaseFile) {
-                const option = require(path.join(__dirname, dir, file))
-                // call the command
-                cmdBase(option)
-            }
-        }
-    }
-
-    readCommands('commands')
-
-    console.log('==== Commands loaded ====\n')
-    cmdBase.listen(client)
+    commands.load()
+    commands.listen(client)
 
     poll(client);
     //welcome(client);
