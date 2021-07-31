@@ -5,7 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
-    "devStart": "nodemon bot.js"
+    "dev": "nodemon bot.js"
   },
   "keywords": [],
   "author": "",
@@ -13,9 +13,18 @@
   "dependencies": {
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
-    "mongoose": "^5.13.4"
+    "module-alias": "^2.2.2",
+    "mongoose": "^5.13.4",
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@schemas": "./schemas",
+    "@util": "./util",
+    "@mods": "./mods",
+    "@commands": "./commands"
   }
 }

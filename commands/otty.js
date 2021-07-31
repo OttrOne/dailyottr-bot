@@ -1,4 +1,4 @@
-const { audit } = require('./../audit')
+const { audit } = require('@util/audit')
 module.exports = {
     aliases: ['otty', 'auth'],
     minArgs: 1,

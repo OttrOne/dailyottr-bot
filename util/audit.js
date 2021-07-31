@@ -1,6 +1,6 @@
-const mongo = require('./mongo');
-const auditSchema = require('./schemas/audit-schema');
-const settings = require('./settings.json')
+const mongo = require('@util/mongo');
+const auditSchema = require('@schemas/audit-schema');
+const settings = require('@root/settings.json')
 
 const cache = {}
 

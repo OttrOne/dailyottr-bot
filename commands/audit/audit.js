@@ -1,6 +1,6 @@
-const mongo = require('./../../mongo');
-const auditSchema = require('./../../schemas/audit-schema');
-const { clearCache } = require('./../../audit');
+const mongo = require('@util/mongo');
+const auditSchema = require('@schemas/audit-schema');
+const { clearCache } = require('@util/audit');
 module.exports = {
     aliases: 'audit',
     maxArgs: 0,

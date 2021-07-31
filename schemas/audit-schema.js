@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { reqString } = require('./types')
+const { reqString } = require('@schemas/types')
 
 const auditSchema = mongoose.Schema({
     _id: reqString,

@@ -1,11 +1,10 @@
+require('module-alias/register')
 require('dotenv').config();
-const path = require('path');
-const fs = require('fs');
 const Discord = require('discord.js');
 const client = new Discord.Client();
-const poll = require('./poll')
-const mongo = require('./mongo')
-const commands = require('./commands/commands')
+//const poll = require('./poll')
+const mongo = require('@util/mongo')
+const commandHandler = require('@util/commands')
 //const welcome = require('./welcome')
 
 
@@ -19,10 +18,10 @@ client.on('ready', async () => {
         }
     })
 
-    commands.load()
-    commands.listen(client)
+    commandHandler.load()
+    commandHandler.listen(client)
 
-    poll(client);
+    //poll(client);
     //welcome(client);
     console.log(`ready.`)
 });

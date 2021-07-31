@@ -1,5 +1,5 @@
-const commandHandler = require('./commands')
-const { prefix } = require('../settings.json');
+const commandHandler = require('@util/commands')
+const { prefix } = require('@root/settings.json');
 module.exports = {
     aliases: ['help', 'h'],
     maxArgs: 1,
