@@ -2,11 +2,10 @@ require('module-alias/register')
 require('dotenv').config();
 const Discord = require('discord.js');
 const client = new Discord.Client();
-//const poll = require('./poll')
+require('discord-buttons')(client);
 const mongo = require('@util/mongo')
 const commandHandler = require('@util/commands')
-//const welcome = require('./welcome')
-
+const modHandler = require('@util/mods')
 
 client.on('ready', async () => {
     console.log(`Logged in as ${client.user.tag}!`)
@@ -17,12 +16,9 @@ client.on('ready', async () => {
             mongoose.connection.close()
         }
     })
-
     commandHandler.load()
+    modHandler.load(client)
     commandHandler.listen(client)
-
-    //poll(client);
-    //welcome(client);
     console.log(`ready.`)
 });
 
