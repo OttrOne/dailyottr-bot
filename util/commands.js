@@ -50,17 +50,25 @@ const validatePermissions = (permissions) => {
   }
 }
 
-const allCommands = {}
+const allCommands = new Map()
+
+class CommandHandler {
+
+  constructor(client, dir) {
+
+  }
+}
 
 module.exports.register = (commandOptions) => {
   let {
-    aliases,
+    name,
+    aliases = [],
     permissions = [],
   } = commandOptions
 
   if(typeof aliases === 'string') aliases = [aliases]
 
-  console.log(`registered command "${aliases[0]}"`)
+  console.log(`registered command "${name}"`)
 
   // ensure permissions are set and all valid
   if(permissions.length) {
@@ -68,18 +76,16 @@ module.exports.register = (commandOptions) => {
     validatePermissions(permissions)
   }
 
-  for (const command of aliases) {
-    allCommands[command] = {
-      ...commandOptions, // object destructoring
-      aliases,
-      permissions
-    }
-  }
+  allCommands.set(name, {
+    ...commandOptions, // object destructoring
+    aliases,
+    permissions
+  })
 }
 
 module.exports.load = (client) => {
   console.log('\n==== Loading commands ====')
-
+  let count = 0;
   // recursively read directory for commands
   const readCommands = dir => {
     const files = fs.readdirSync(path.join(__dirname, dir))
@@ -91,15 +97,16 @@ module.exports.load = (client) => {
             const option = require(path.join(__dirname, dir, file))
             // call the command
             this.register(option)
+            ++count;
         }
     }
   }
   readCommands('../commands')
-  console.log('==== Commands loaded ====\n')
+  console.log(`==== ${count} Commands loaded ====\n`)
 }
 
 module.exports.getCommands = () => {
-  return { ... allCommands }; // return copy of commands
+  return new Map(allCommands)
 }
 
 module.exports.listen = (client) => {
@@ -114,9 +121,18 @@ module.exports.listen = (client) => {
 
     if (cmd.startsWith(prefix)) {
 
+      let command = undefined
+
       cmd = cmd.replace(prefix, '');
       // get command from command name (first alias)
-      const command = allCommands[cmd]
+      //const command = allCommands.find((item) => item.name === 'b')
+      allCommands.forEach((item) => {
+
+        if(item.name === cmd || item.aliases.includes(cmd)) {
+          command = item
+          return;
+        }
+      })
       if (!command) return; // return if not found
 
       // default values for commands

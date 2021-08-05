@@ -1,5 +1,5 @@
 module.exports = {
-    aliases: 'servers',
+    name: 'servers',
     maxArgs: 0,
     callback: (message, arguments, text) => {
         message.client.guilds.cache.forEach((guild) => {

@@ -1,5 +1,5 @@
 module.exports = {
-    aliases: ['members'],
+    name: 'members',
     maxArgs: 1,
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments, text) => {

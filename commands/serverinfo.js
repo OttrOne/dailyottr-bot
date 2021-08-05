@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 module.exports = {
-    aliases: 'serverinfo',
+    name: 'serverinfo',
     maxArgs: 0,
     callback: (message, arguments, text) => {
         const { guild } = message;

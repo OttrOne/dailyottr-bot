@@ -2,9 +2,11 @@ const mongo = require('@util/mongo');
 const auditSchema = require('@schemas/audit-schema');
 const { clearCache } = require('@util/audit');
 module.exports = {
-    aliases: 'audit',
+    name: 'audit',
     maxArgs: 0,
     permissions: 'ADMINISTRATOR',
+    category: 'intern',
+    description: 'Set the Audit channel.',
     callback: async (message, arguments, text) => {
         const { channel, guild } = message;
 

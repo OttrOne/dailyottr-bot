@@ -1,6 +1,7 @@
 const { audit } = require('@util/audit')
 module.exports = {
-    aliases: ['otty', 'auth'],
+    name: 'otty',
+    aliases: ['auth'],
     minArgs: 1,
     maxArgs: 1,
     requiredRoles: ['Otty'],

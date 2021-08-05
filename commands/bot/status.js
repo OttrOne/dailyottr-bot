@@ -1,5 +1,5 @@
 module.exports = {
-    aliases: 'status',
+    name: 'status',
     minArgs: 1,
     maxArgs: 1,
     expectedArgs: '<text>',

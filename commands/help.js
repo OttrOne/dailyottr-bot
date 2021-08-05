@@ -3,7 +3,8 @@ const { prefix } = require('@root/settings.json');
 const { MessageEmbed } = require('discord.js');
 const disbut = require("discord-buttons");
 module.exports = {
-    aliases: ['help', 'h'],
+    name: 'help',
+    aliases: ['h'],
     maxArgs: 1,
     description: 'List of commands.',
     category: 'intern',
@@ -19,22 +20,15 @@ module.exports = {
         const printCommandList = (commandlist) => {
             let temp = ''
             for (const command of commandlist) {
-                const mainCommand = command.aliases[0];
                 const args = command.expectedArgs ? ` ${command.expectedArgs}` : ''
-                const description = command.description ? ` ${command.description}` : ''
-                temp += `\`${prefix}${mainCommand}${args}\` ${description}\n`
+                const description = command.description ? `, ${command.description}` : ''
+                const aliases = command.aliases.length ? `, aliases: \`${prefix}${command.aliases.join(`\`, \`${prefix}`)}\`` : ''
+                temp += `\`${prefix}${command.name}${args}\`${aliases}${description}\n`
             }
             return temp;
         }
 
-        // first filter to separate
-        for (const alias in commands) {
-
-            const command = commands[alias]
-
-            // skip already listed commands by keeping track of aliases
-            if(aliases.includes(alias)) continue;
-            aliases = aliases.concat(command.aliases)
+        for (const [name, command] of commands.entries()) {
 
             // check for permissions
             if(command.permissions) {

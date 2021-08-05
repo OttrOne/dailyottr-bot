@@ -1,10 +1,11 @@
 const { audit } = require('@util/audit')
 module.exports = {
-    aliases: ['clear', 'cc'],
+    name: 'clear',
+    aliases: ['cc'],
     maxArgs: 0,
     permissions: 'ADMINISTRATOR',
     callback: (message, arguments, text) => {
-        message.channel.messages.fetch()
+        message.channel.messages.fetch({limit: 100})
             .then(result => {
                 message.channel.bulkDelete(result, true)
             })
