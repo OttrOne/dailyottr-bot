@@ -25,6 +25,7 @@ module.exports = {
                     value: owner.user.tag
                 }
             )
-        message.channel.send(embed)
+        //message.channel.send(embed)
+        message.author.send(embed)
     },
 }
