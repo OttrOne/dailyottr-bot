@@ -3,12 +3,17 @@ const fs = require('fs');
 const { MessageEmbed } = require('discord.js');
 
 /**
+ *  Command handler to autoload commands
  *
+ * @author AlexOttr <alex@ottr.one>
+ * @version 1.0
+ *
+ * @exports CommandHandler
  */
 class CommandHandler {
 
   /**
-   *
+   * Create a new CommandHandler instance
    * @param Client client
    * @param string dir
    */
@@ -24,8 +29,9 @@ class CommandHandler {
   }
 
   /**
-   *
+   * Check the given array of permissions is known to Discord
    * @param array permissions
+   * @throws {Error} Exception when the given permission is unknown to Discord
    */
   _validatePermissions(permissions) {
     const validPermissions = [
@@ -76,7 +82,7 @@ class CommandHandler {
   }
 
   /**
-   *
+   * Add the loaded command with given options to the command map
    * @param directory commandOptions
    */
   _register(commandOptions) {
@@ -88,8 +94,6 @@ class CommandHandler {
     } = commandOptions
 
     if(typeof aliases === 'string') aliases = [aliases]
-
-    //console.log(`registered command "${name}"`)
 
     // ensure permissions are set and all valid
     if(permissions.length) {
@@ -105,8 +109,9 @@ class CommandHandler {
   }
 
   /**
-   *
-   * @param string dir
+   * Recursive inner function to call the commands from the given directory
+   * @param {string} dir directory to load from
+   * @returns {number} sum of loaded commands
    */
   _load(dir) {
     let count = 0;
@@ -126,6 +131,10 @@ class CommandHandler {
     return count
   }
 
+  /**
+   * Sends a formatted commands list to the channel
+   * @param {Message} message Discord Message instance
+   */
   _help(message) {
     let reply = ''
 
@@ -148,14 +157,29 @@ class CommandHandler {
 
         // check for permissions
         if(command.permissions) {
-            let hasPermission = true
-            for (const permission of command.permissions) {
-                if (!message.member.hasPermission(permission)) {
-                    hasPermission = false;
-                    break;
-                }
+          let hasPermission = true
+          for (const permission of command.permissions) {
+            if (!message.member.hasPermission(permission)) {
+              hasPermission = false;
+              break;
             }
-            if (!hasPermission) continue;
+          }
+          if (!hasPermission) continue;
+        }
+
+        // check if user has required roles or is administrator
+        if(command.requiredRoles) {
+          let hasRole = true // initiate
+          for (const roleName of command.requiredRoles) {
+            // find role by name
+            const role = message.guild.roles.cache.find(role => role.name === roleName)
+            // check if role exists, user has role or is not administrator
+            if (!role || (!message.member.roles.cache.has(role.id) && !message.member.hasPermission('ADMINISTRATOR'))) {
+              hasRole = false;
+              break;
+            }
+          }
+          if (!hasRole) continue; // continue with next command if role required but not present
         }
 
         if(command.category) {
@@ -183,7 +207,7 @@ class CommandHandler {
   }
 
   /**
-   *
+   * Starts the listener for the `message` event
    */
   _listen() {
     this.client.on('message', message => {
@@ -258,14 +282,18 @@ class CommandHandler {
   }
 
   /**
-   *
+   * Outer function to load all commands in the given root directory
    */
   load() {
-    console.log('\nStarting up CommandHandler')
+    console.log('\x1b[33m%s\x1b[0m', '\nStarting up CommandHandler')
     const count = this._load(this.dir)
-    console.log(`Done. ${count} Commands loaded\n`)
+    console.log('\x1b[33m%s\x1b[0m', `Done. ${count} Commands loaded\n`)
   }
 
+  /**
+   * Returns a copy of the commands map
+   * @returns {Map} of commands
+   */
   getCommands() {
     return new Map(this.commands)
   }
