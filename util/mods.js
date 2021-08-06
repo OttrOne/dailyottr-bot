@@ -51,8 +51,12 @@ class ModLoader {
      */
     load() {
         console.log('\x1b[35m%s\x1b[0m', 'Starting up ModLoader')
-        const count = this._load(this.dir)
-        console.log('\x1b[35m%s\x1b[0m', `Done. ${count} Mods loaded\n`)
+        try {
+            const count = this._load(this.dir)
+            console.log('\x1b[35m%s\x1b[0m', `Done. ${count} Mods loaded\n`)
+        } catch (e) {
+            console.log(['Could not load any mods', e])
+        }
     }
 }
 
