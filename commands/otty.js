@@ -5,7 +5,9 @@ module.exports = {
     minArgs: 1,
     maxArgs: 1,
     requiredRoles: ['Otty'],
-    expectedArgs: '<usertag>',
+    expectedArgs: '<@usertag>',
+    category: 'OttrSpace',
+    description: 'Add another Otty',
     callback: (message, arguments, text) => {
 
         const user = message.mentions.users.first();

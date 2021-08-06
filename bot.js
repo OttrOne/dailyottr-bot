@@ -16,6 +16,8 @@ client.on('ready', async () => {
         } finally {
             mongoose.connection.close()
         }
+    }).catch((e) => {
+        console.log(e)
     })
     const ch = new CommandHandler(client, '../commands/')
     const ml = new ModLoader(client, '../mods/')
