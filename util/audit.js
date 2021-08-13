@@ -1,6 +1,5 @@
 const mongo = require('@util/mongo');
 const auditSchema = require('@schemas/audit-schema');
-const settings = require('@root/settings.json')
 
 const cache = {}
 
@@ -13,24 +12,19 @@ module.exports = {
         if(!data) {
             console.log('audit channel not cached, retrieving data.')
             // retrieve data from mongodb if not cached
-            await mongo().then(async (mongoose) => {
-                try {
-                    const result = await auditSchema.findOne({ _id: guild.id })
-                    // if no entry for current guild found, notify
-                    if(!result) {
-                        message.channel.send(`audit channel not set up, please run the command \`${settings.prefix}setaudit\` in the audit channel.`)
-                        console.log('audit channel not set, notified.')
-                        cache[guild.id] = data = { channelId: message.channel.id }
-                        return;
-                    }
-                    // if found, cache data
-                    cache[guild.id] = data = {
-                        channelId: result.channelId
-                    }
-                } finally {
-                    mongoose.connection.close()
-                }
-            })
+
+            const result = await auditSchema.findOne({ _id: guild.id })
+            // if no entry for current guild found, notify
+            if(!result) {
+                message.channel.send(`audit channel not set up.`)
+                console.log('audit channel not set, notified.')
+                cache[guild.id] = data = { channelId: message.channel.id }
+                return;
+            }
+            // if found, cache data
+            cache[guild.id] = data = {
+                channelId: result.channelId
+            }
         }
         // send audit text to channel
         const channel = guild.channels.cache.get(data.channelId)
