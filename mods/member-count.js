@@ -1,8 +1,9 @@
 const mongo = require('@util/mongo')
 const membercountSchema = require('@schemas/membercount-schema')
-const {Discord, MessageEmbed, Client} = require('discord.js');
+const { MessageEmbed, Client} = require('discord.js');
 const cache = {}
 const { Task, addTask} = require('@util/scheduler')
+const logger = require('@util/logger')
 
 /**
  * Update all configured channels from cache
@@ -12,7 +13,7 @@ const { Task, addTask} = require('@util/scheduler')
 const updateChannel = async (guild) => {
 
     if(!cache[guild.id]) {
-        console.log("not chached")
+        logger.info(`[MemberCountMod] channels not chached for guild ${guild.name}`)
 
         const result = await membercountSchema.findOne({ guild: guild.id })
         if(!result) return;
@@ -32,10 +33,10 @@ const updateChannel = async (guild) => {
                 count = role.members.size.toLocaleString()
             }
         }
-        console.log(`Set ${chn.channelPrefix} ${count} for channel ${chn.channelId} on Guild ${guild.id}`)
+        logger.info(`[MemberCountMod] Set ${chn.channelPrefix} ${count} for channel ${chn.channelId} on Guild ${guild.id}`)
         channel.setName(`${chn.channelPrefix} ${count}`).catch(error => {
 
-            console.error('Failed to delete the message:', error);
+            logger.error(error);
         })
     }
 }
@@ -50,10 +51,9 @@ module.exports = (client) => {
         const updateCounter = new Task(`updateCounter-${guild.id}`,(context) => {
             guild = context[0];
             updateChannel(guild)
-            console.log(guild.name)
         }, 5*60*1000, undefined, guild)
         addTask(updateCounter)
-        console.log(guild.name)
+        logger.info(`[MemberCountMod] Add MemberCount Mod to Scheduler for guild ${guild.name}`)
     })
 }
 /**
@@ -95,7 +95,7 @@ module.exports.listChannels = async (message) => {
 
     // check if in cache. if not -> retrieve from database
     if(!cache[guild.id]) {
-        console.log("not chached")
+        logger.info(`[MemberCountMod] channels not chached for guild ${guild.name}`)
 
         const result = await membercountSchema.findOne({ guild: guild.id })
         if(!result) return;

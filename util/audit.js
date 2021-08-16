@@ -1,4 +1,5 @@
 const mongo = require('@util/mongo');
+const logger = require('@util/logger')
 const auditSchema = require('@schemas/audit-schema');
 
 const cache = {}
@@ -10,14 +11,14 @@ module.exports = {
 
         // check if audit channel cached
         if(!data) {
-            console.log('audit channel not cached, retrieving data.')
+            logger.info('audit channel not cached, retrieving data.')
             // retrieve data from mongodb if not cached
 
             const result = await auditSchema.findOne({ _id: guild.id })
             // if no entry for current guild found, notify
             if(!result) {
                 message.channel.send(`audit channel not set up.`)
-                console.log('audit channel not set, notified.')
+                logger.error('audit channel not set, notified.')
                 cache[guild.id] = data = { channelId: message.channel.id }
                 return;
             }
@@ -32,6 +33,6 @@ module.exports = {
     },
     clearCache: (message) => {
         delete cache[message.guild.id];
-        console.log(`cleared audit cache for ${message.guild.name}`)
+        logger.info(`cleared audit cache for ${message.guild.name}`)
     }
 }

@@ -7,6 +7,7 @@ const mongo = require('@util/mongo')
 const { CommandHandler } = require('@util/commands')
 const { ModLoader } = require('@util/mods')
 const Scheduler = require('@util/scheduler')
+const logger = require('@util/logger')
 
 client.on('ready', async () => {
 
@@ -15,7 +16,7 @@ client.on('ready', async () => {
     await mongo().then(mongoose => {
         console.log('\x1b[32m%s\x1b[0m', `Successfully connected to mongodb`)
     }).catch((e) => {
-        console.log(e)
+        logger.error(e)
     })
     const ch = new CommandHandler(client, '../commands/', '!')
     const ml = new ModLoader(client, '../mods/')

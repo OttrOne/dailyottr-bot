@@ -1,3 +1,5 @@
+const logger = require('@util/logger')
+
 class Task {
     constructor(name, callback, timeout = undefined, duedate = undefined, ...params){
         this.name = name
@@ -5,11 +7,17 @@ class Task {
         this.params = params;
         this.duedate = duedate
         this.timeout = timeout
-
         this.nextCall = Date.now()
+        if(duedate) {
+            this.setDuedate(duedate)
+        } else if (timeout) {
+            this.setTimeout(timeout)
+        }
     }
 
     setDuedate(duedate) {
+        if(duedate)
+            logger.info(`[Scheduler] Set duedate for task "${this.name} to ${duedate - Date.now()}ms in the future.`)
         this.duedate = duedate;
         this.nextCall = duedate;
     }
@@ -19,7 +27,8 @@ class Task {
     }
 
     setTimeout(timeout) {
-        console.log(`Set timeout for task "${this.name} to ${timeout}ms`)
+        if (timeout)
+            logger.info(`[Scheduler] Set timeout for task "${this.name} to ${timeout}ms`)
         this.timeout = timeout;
         this.nextCall = Date.now() + timeout;
     }
@@ -31,13 +40,13 @@ class Task {
 
         if (this.timeout && Date.now() >= this.nextCall) {
 
-            console.log(`Executed task "${this.name}" and reset timeout to ${this.timeout}ms.`)
+            logger.info(`[Scheduler] Executed task "${this.name}" and reset timeout to ${this.timeout}ms.`)
             this.callback(this.params);
             this.setTimeout(this.timeout);
 
         } else if (this.duedate && Date.now() >= this.nextCall) {
 
-            console.log(`Executed task "${this.name}" and deleted Duedate.`)
+            logger.info(`[Scheduler] Executed task "${this.name}" and deleted Duedate.`)
             this.callback(this.params);
             this.setDuedate(undefined);
         }
@@ -52,8 +61,7 @@ const checkForTasks = () => {
         task.run()
         if (task.getDuedate() === undefined && task.getTimeout() === undefined) {
             // remove if only onced
-            const index = tasks.indexOf(task);
-            if (index !== -1) tasks.splice(index, 1);
+            tasks.delete(name)
         }
 
     }
@@ -66,11 +74,7 @@ module.exports = async () => {
 
 module.exports.addTask = (task) => {
     tasks.set(task.name, task)
-}
-
-module.exports.getTaskByName = (name) => {
-
-    // check if task with name is in task list
+    logger.debug(`[Scheduler] Add Task: ${task.name} with timestamp: ${task.getDuedate()} and cycle: ${task.getTimeout()}`)
 }
 
 module.exports.Task = Task

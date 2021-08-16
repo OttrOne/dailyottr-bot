@@ -196,14 +196,16 @@ class CommandHandler {
         reply += `${printCommandList(categorized[command])}\n`
     }
     // print uncategorized
-    reply += `**Uncategorized:**\n`
-    reply += printCommandList(uncategorized)
+    if(uncategorized.length) {
+      reply += `**Uncategorized:**\n`
+      reply += printCommandList(uncategorized)
+    }
 
     const embed = new MessageEmbed()
         .setColor('#00AAFF')
         .setTitle('Supported Commands')
         .setDescription(reply)
-    message.channel.send(embed)
+    message.channel.send({embed: embed })
   }
 
   /**
@@ -212,6 +214,8 @@ class CommandHandler {
   _listen() {
     this.client.on('message', message => {
       const { member, content, guild } = message;
+
+      if(guild === null) return;
 
       // split command on spaces
       const args = content.split(/[ ]+/)
@@ -286,8 +290,12 @@ class CommandHandler {
    */
   load() {
     console.log('\x1b[33m%s\x1b[0m', '\nStarting up CommandHandler')
-    const count = this._load(this.dir)
-    console.log('\x1b[33m%s\x1b[0m', `Done. ${count} Commands loaded\n`)
+    try {
+      const count = this._load(this.dir)
+      console.log('\x1b[33m%s\x1b[0m', `Done. ${count} Commands loaded\n`)
+    } catch (e) {
+        console.log(['Could not load any commands', e])
+    }
   }
 
   /**
