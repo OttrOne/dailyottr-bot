@@ -8,16 +8,13 @@
     "dev": "nodemon bot.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "AlexOttr <alex@ottr.one>",
+  "license": "MIT",
   "dependencies": {
-    "discord-buttons": "^4.0.0",
     "discord.js": "^12.5.3",
     "dotenv": "^10.0.0",
     "module-alias": "^2.2.2",
-    "moment-timezone": "^0.5.33",
     "mongoose": "^5.13.4",
-    "node-fetch": "^2.6.1",
     "rss-parser": "^3.12.0"
   },
   "devDependencies": {
