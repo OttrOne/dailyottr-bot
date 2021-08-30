@@ -21,3 +21,5 @@ Commands like `do!last` or `do!today` to send the last Picture again will follow
 
 ## How to host the Bot yourself?
 If you have your own infrastructure and want to modify the bot, that's absolutely fine. The code is Open Source under the MIT license and you can just fork the project (or download via zip lol) and host it yourself. I'll provide a **Docker image** soon.
+
+[![Docker Image CI](https://github.com/OttrOne/dailyottr-bot/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/OttrOne/dailyottr-bot/actions/workflows/docker-image.yml)
