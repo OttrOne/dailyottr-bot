@@ -8,7 +8,6 @@ module.exports = {
     callback: async (message, arguments, text) => {
         const { guild } = message;
         let [limit] = arguments
-        console.log(limit)
         if(!limit) limit = 1
         sendLast(guild, limit);
     },

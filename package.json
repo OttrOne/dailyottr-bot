@@ -1,6 +1,6 @@
 {
   "name": "daily-otter-bot",
-  "version": "1.0.2",
+  "version": "1.0.2b",
   "description": "Posts daily Ott pics",
   "main": "bot.js",
   "scripts": {
